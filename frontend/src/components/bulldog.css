@@ -1,0 +1,537 @@
+/* The Campus Customs bulldog. Every size is in em, so `font-size` on .dog
+   (set from the size prop) scales the whole drawing. */
+
+.dog {
+  --fur: #ecd3ac;
+  --fur-dark: #c9975f;
+  --muzzle: #fdf6ea;
+  --ink: #2b1f1a;
+  --sweater: #00356b;
+  --cream: #f7efe1;
+
+  position: relative;
+  width: 10em;
+  height: 12em;
+  flex: none;
+  user-select: none;
+}
+
+.dog-pose-peek {
+  height: 6.4em;
+}
+
+.dog-pose-head {
+  height: 6em;
+}
+
+.dog-head {
+  position: absolute;
+  z-index: 3;
+  top: 0.3em;
+  left: 2em;
+  width: 6em;
+  height: 5em;
+  border-radius: 46% 46% 42% 42% / 52% 52% 46% 46%;
+  background: var(--fur);
+  box-shadow: inset 0 -0.35em 0 rgba(160, 110, 60, 0.18);
+}
+
+.dog-head {
+  transform-origin: 50% 90%;
+}
+
+.dog-pose-head .dog-head {
+  top: 0.5em;
+}
+
+/* Ears: folded rose ears */
+.dog-ear {
+  position: absolute;
+  top: -0.25em;
+  width: 2em;
+  height: 1.7em;
+  background: var(--fur-dark);
+  border-radius: 70% 20% 65% 35%;
+}
+
+.dog-ear-left {
+  left: -0.35em;
+  transform: rotate(-28deg);
+}
+
+.dog-ear-right {
+  right: -0.35em;
+  transform: rotate(28deg) scaleX(-1);
+}
+
+.dog-wrinkle {
+  position: absolute;
+  top: 0.75em;
+  left: 50%;
+  width: 1.6em;
+  height: 0.6em;
+  margin-left: -0.8em;
+  border-top: 0.14em solid var(--fur-dark);
+  border-radius: 50% 50% 0 0;
+  opacity: 0.7;
+}
+
+.dog-wrinkle::after {
+  content: '';
+  position: absolute;
+  top: 0.2em;
+  left: 0.35em;
+  width: 0.9em;
+  height: 0.4em;
+  border-top: 0.12em solid var(--fur-dark);
+  border-radius: 50% 50% 0 0;
+}
+
+/* Brown patch around the right eye, the character's signature */
+.dog-patch {
+  position: absolute;
+  top: 1.25em;
+  right: 0.75em;
+  width: 1.9em;
+  height: 1.7em;
+  border-radius: 55% 45% 50% 50%;
+  background: var(--fur-dark);
+  opacity: 0.85;
+}
+
+.dog-eye {
+  position: absolute;
+  top: 1.8em;
+  width: 0.78em;
+  height: 0.78em;
+  border-radius: 50%;
+  background: var(--ink);
+  animation: dog-blink 5s infinite;
+}
+
+.dog-eye::after {
+  content: '';
+  position: absolute;
+  top: 0.14em;
+  left: 0.18em;
+  width: 0.24em;
+  height: 0.24em;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.dog-eye-left {
+  left: 1.45em;
+}
+
+.dog-eye-right {
+  right: 1.45em;
+}
+
+/* Happy: eyes become smiling arcs */
+.dog-mood-happy .dog-eye,
+.dog-mood-wink .dog-eye-right {
+  height: 0.45em;
+  top: 1.95em;
+  background: transparent;
+  border-top: 0.2em solid var(--ink);
+  border-radius: 50% 50% 0 0;
+  animation: none;
+}
+
+.dog-mood-happy .dog-eye::after,
+.dog-mood-wink .dog-eye-right::after {
+  display: none;
+}
+
+.dog-cheek {
+  position: absolute;
+  top: 2.85em;
+  width: 0.8em;
+  height: 0.45em;
+  border-radius: 50%;
+  background: #f2a9a0;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.dog-cheek-left {
+  left: 0.55em;
+}
+
+.dog-cheek-right {
+  right: 0.55em;
+}
+
+.dog-mood-happy .dog-cheek,
+.dog-mood-wink .dog-cheek {
+  opacity: 0.75;
+}
+
+.dog-muzzle {
+  position: absolute;
+  bottom: 0.25em;
+  left: 50%;
+  width: 3.8em;
+  height: 2.35em;
+  margin-left: -1.9em;
+  border-radius: 50% 50% 46% 46% / 55% 55% 45% 45%;
+  background: var(--muzzle);
+}
+
+.dog-nose {
+  position: absolute;
+  top: 0.12em;
+  left: 50%;
+  width: 1.35em;
+  height: 0.85em;
+  margin-left: -0.675em;
+  border-radius: 50% 50% 46% 46% / 62% 62% 38% 38%;
+  background: var(--ink);
+}
+
+.dog-nose::after {
+  content: '';
+  position: absolute;
+  top: 0.14em;
+  left: 0.3em;
+  width: 0.35em;
+  height: 0.18em;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+/* Line from nose to mouth */
+.dog-nose::before {
+  content: '';
+  position: absolute;
+  top: 0.8em;
+  left: 50%;
+  width: 0.1em;
+  height: 0.35em;
+  margin-left: -0.05em;
+  background: var(--ink);
+}
+
+/* Underbite: a wide lower jaw with two little teeth */
+.dog-mouth {
+  position: absolute;
+  bottom: 0.3em;
+  left: 50%;
+  width: 1.7em;
+  height: 0.55em;
+  margin-left: -0.85em;
+  border-radius: 0.2em 0.2em 0.9em 0.9em;
+  background: #6e3434;
+  box-shadow: 0 -0.1em 0 0.06em var(--ink);
+  overflow: visible;
+}
+
+.dog-tooth {
+  position: absolute;
+  top: -0.2em;
+  width: 0.26em;
+  height: 0.36em;
+  background: #fff;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+
+.dog-tooth-left {
+  left: 0.15em;
+}
+
+.dog-tooth-right {
+  right: 0.15em;
+}
+
+.dog-tongue {
+  position: absolute;
+  bottom: -0.45em;
+  left: 50%;
+  width: 0.8em;
+  height: 0.75em;
+  margin-left: -0.4em;
+  border-radius: 0 0 0.45em 0.45em;
+  background: #ee8a8a;
+}
+
+/* Body in a varsity sweatshirt */
+.dog-body {
+  position: absolute;
+  z-index: 2;
+  top: 4.45em;
+  left: 1.7em;
+  width: 6.6em;
+  height: 5.8em;
+  border-radius: 46% 46% 18% 18% / 58% 58% 14% 14%;
+  background: var(--sweater);
+}
+
+/* Ribbed collar with stitching */
+.dog-body::before {
+  content: '';
+  position: absolute;
+  top: 0.15em;
+  left: 50%;
+  width: 3em;
+  height: 0.8em;
+  margin-left: -1.5em;
+  border-radius: 0 0 1.5em 1.5em;
+  border: 0.09em dashed rgba(255, 255, 255, 0.55);
+  border-top: none;
+}
+
+/* Ribbed hem */
+.dog-body::after {
+  content: '';
+  position: absolute;
+  bottom: 0.35em;
+  left: 0.3em;
+  right: 0.3em;
+  height: 0.45em;
+  border-top: 0.09em dashed rgba(255, 255, 255, 0.45);
+}
+
+/* Chenille varsity letter (font-size 2em, so its own sizes are halved) */
+.dog-letter {
+  position: absolute;
+  top: 0.68em;
+  left: 50%;
+  width: 1.25em;
+  height: 1.25em;
+  margin-left: -0.625em;
+  display: grid;
+  place-items: center;
+  border-radius: 0.18em;
+  background: var(--cream);
+  outline: 0.05em dashed var(--sweater);
+  outline-offset: -0.14em;
+  color: var(--sweater);
+  font-family: 'Libre Caslon Text', Georgia, serif;
+  font-size: 2em;
+  font-weight: 700;
+  line-height: 1;
+  padding-top: 0.08em;
+}
+
+.dog-arm {
+  position: absolute;
+  z-index: 2;
+  top: 5.2em;
+  width: 1.9em;
+  height: 4.3em;
+  border-radius: 1em 1em 0.9em 0.9em;
+  background: var(--sweater);
+  transform-origin: 50% 0.6em;
+}
+
+/* Varsity stripes at the cuff */
+.dog-arm::after {
+  content: '';
+  position: absolute;
+  bottom: 0.75em;
+  left: 0;
+  right: 0;
+  height: 0.42em;
+  border-top: 0.13em solid var(--cream);
+  border-bottom: 0.13em solid var(--cream);
+}
+
+.dog-arm-left {
+  left: 1.05em;
+  transform: rotate(14deg);
+}
+
+.dog-arm-right {
+  left: 7.05em;
+  transform: rotate(-14deg);
+}
+
+.dog-paw {
+  position: absolute;
+  bottom: -0.55em;
+  left: -0.15em;
+  width: 2.2em;
+  height: 1.35em;
+  border-radius: 50%;
+  background: var(--fur);
+}
+
+.dog-paw::before,
+.dog-foot::before {
+  content: '';
+  position: absolute;
+  bottom: 0.15em;
+  left: 0.7em;
+  width: 0.8em;
+  height: 0.5em;
+  border-left: 0.09em solid var(--fur-dark);
+  border-right: 0.09em solid var(--fur-dark);
+}
+
+.dog-foot {
+  position: absolute;
+  z-index: 3;
+  bottom: 1.1em;
+  width: 2.3em;
+  height: 1.35em;
+  border-radius: 50% 50% 45% 45%;
+  background: var(--fur);
+}
+
+.dog-foot-left {
+  left: 2em;
+}
+
+.dog-foot-right {
+  right: 2em;
+}
+
+/* Wave: right arm up, waving */
+.dog-pose-wave .dog-arm-right {
+  top: 4.6em;
+  transform: rotate(-150deg);
+  animation: dog-wave 1.6s ease-in-out infinite;
+}
+
+/* Pennant: left arm up holding a flag */
+.dog-pose-pennant .dog-arm-left {
+  top: 4.6em;
+  transform: rotate(150deg);
+}
+
+/* The flag pole sits behind the raised left paw; the flag flies outward. */
+.dog-pennant {
+  position: absolute;
+  z-index: 1;
+  top: -1.2em;
+  left: 0.95em;
+  width: 0.2em;
+  height: 5em;
+  border-radius: 0.1em;
+  background: #8a5a2b;
+}
+
+.dog-pennant span {
+  position: absolute;
+  top: 0.1em;
+  right: 0.2em;
+  width: 4.6em;
+  height: 1.9em;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 0.55em;
+  background: var(--sweater);
+  clip-path: polygon(100% 0, 0 50%, 100% 100%);
+  color: #fff;
+  font-family: 'Libre Caslon Text', Georgia, serif;
+  font-size: 0.72em;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  transform-origin: 100% 50%;
+  animation: dog-flag 2.4s ease-in-out infinite;
+}
+
+/* Peek: just head and paws, meant to sit on an edge */
+.dog-pose-peek .dog-head {
+  top: 0.2em;
+  animation: dog-peek 6s ease-in-out infinite;
+}
+
+.dog-peek-paw {
+  position: absolute;
+  z-index: 4;
+  bottom: 0;
+  width: 2em;
+  height: 1.3em;
+  border-radius: 50% 50% 40% 40%;
+  background: var(--fur);
+  box-shadow: inset 0 -0.15em 0 rgba(160, 110, 60, 0.2);
+}
+
+.dog-peek-paw::before {
+  content: '';
+  position: absolute;
+  bottom: 0.2em;
+  left: 0.6em;
+  width: 0.75em;
+  height: 0.45em;
+  border-left: 0.09em solid var(--fur-dark);
+  border-right: 0.09em solid var(--fur-dark);
+}
+
+.dog-peek-paw-left {
+  left: 2.1em;
+}
+
+.dog-peek-paw-right {
+  right: 2.1em;
+}
+
+/* Happy mood: a little hop */
+.dog-mood-happy:not(.dog-pose-head) {
+  animation: dog-hop 0.6s ease-out 2;
+}
+
+@keyframes dog-blink {
+  0%,
+  92%,
+  100% {
+    transform: scaleY(1);
+  }
+  95% {
+    transform: scaleY(0.1);
+  }
+}
+
+@keyframes dog-wave {
+  0%,
+  100% {
+    transform: rotate(-150deg);
+  }
+  50% {
+    transform: rotate(-120deg);
+  }
+}
+
+@keyframes dog-flag {
+  0%,
+  100% {
+    transform: skewY(0deg) scaleX(1);
+  }
+  50% {
+    transform: skewY(-4deg) scaleX(0.94);
+  }
+}
+
+@keyframes dog-peek {
+  0%,
+  70%,
+  100% {
+    transform: translateY(0) rotate(0);
+  }
+  80% {
+    transform: translateY(-0.25em) rotate(-5deg);
+  }
+  90% {
+    transform: translateY(-0.25em) rotate(4deg);
+  }
+}
+
+@keyframes dog-hop {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-0.9em);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dog *,
+  .dog {
+    animation: none !important;
+  }
+}

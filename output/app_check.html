@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Campus Customs: Live App Check</title>
+<style>
+  :root {
+    --yale: #00356b;
+    --accent: #286dc0;
+    --ivory: #f6f0e4;
+    --paper: #fffdf8;
+    --ink: #182433;
+    --muted: #586274;
+    --line: rgba(0, 53, 107, 0.16);
+    --pass: #1a7f37;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  }
+  header {
+    background: var(--yale);
+    color: var(--ivory);
+    padding: 2.5rem 1.5rem 2rem;
+  }
+  header .wrap, main { max-width: 1080px; margin: 0 auto; }
+  h1, h2, h3 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; color: var(--yale); line-height: 1.2; }
+  header h1 { color: #fff; font-size: 2.4rem; margin: 0 0 0.4rem; }
+  header p { margin: 0.2rem 0; color: #c3d7ee; }
+  main { padding: 1.5rem 1.5rem 4rem; }
+  nav.toc { margin: 1.5rem 0 2.5rem; padding: 1.2rem 1.4rem; background: var(--ivory); border-radius: 12px; }
+  nav.toc h2 { font-size: 1.2rem; margin: 0 0 0.6rem; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+  th, td { text-align: left; padding: 0.5rem 0.7rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .pass { color: var(--pass); font-weight: 700; white-space: nowrap; }
+  a { color: var(--accent); }
+  section.check { margin-top: 3.5rem; padding-top: 1.5rem; border-top: 2px dashed var(--line); }
+  section.check > h2 { font-size: 2rem; margin: 0 0 0.3rem; }
+  .what { color: var(--muted); margin: 0 0 1.5rem; }
+  figure { margin: 0 0 2.2rem; }
+  figure h3 { font-size: 1.3rem; margin: 0 0 0.6rem; }
+  figure img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0, 36, 74, 0.1);
+    background: #fff;
+  }
+  figure img.narrow { max-width: 420px; }
+  .pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; align-items: start; }
+  figcaption { margin-top: 0.7rem; padding: 0.7rem 0.9rem; background: var(--ivory); border-left: 4px solid var(--yale); border-radius: 0 8px 8px 0; }
+  figcaption strong { color: var(--yale); }
+  .evidence { margin: 0 0 2rem; padding: 1rem 1.2rem; border: 1px solid var(--line); border-radius: 10px; }
+  .evidence h3 { font-size: 1.1rem; margin: 0 0 0.6rem; }
+  code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.86rem; }
+  pre { margin: 0.4rem 0 0; padding: 0.8rem 1rem; background: #0f2a4a; color: #e6eef8; border-radius: 8px; overflow-x: auto; white-space: pre-wrap; }
+  .note { padding: 0.9rem 1.1rem; border: 1px solid #f5c37a; background: #fff6e6; border-radius: 10px; margin: 0 0 2rem; }
+  .note strong { color: #7a4600; }
+  footer { margin-top: 3rem; color: var(--muted); font-size: 0.85rem; }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>Campus Customs: Live App Check</h1>
+    <p>Tested on the running site (React + Vite on <code>localhost:5173</code>, FastAPI + PydanticAI agent on <code>localhost:8000</code>, model <code>gpt-5.6-luna</code>), 1 October 2026.</p>
+    <p>Every number in a chat reply below was checked against <code>data/campus_customs.db</code> with SQL.</p>
+    <p>Screenshots 1c, 2a–2c and 3a–3c were retaken on 5 October 2026 after later updates (five-page nav, stock shown for the selected size, custom price range, whole product photos on one background); the replies and figures were re-checked and are unchanged.</p>
+  </div>
+</header>
+
+<main>
+  <nav class="toc">
+    <h2>Summary</h2>
+    <table>
+      <tr><th>Check</th><th>What it shows</th><th>Result</th></tr>
+      <tr><td><a href="#check-1">1. Chat checks inventory</a></td><td>Stock and price in the chat come from the database, including a sold-out size.</td><td class="pass">✓ Pass</td></tr>
+      <tr><td><a href="#check-2">2. Dynamic search-result cards</a></td><td>A category question puts matching product cards on the page, and they open the product page.</td><td class="pass">✓ Pass</td></tr>
+      <tr><td><a href="#check-3">3. Problem 9 usability features</a></td><td>Refine and sort, similar styles in a sold-out size, size-aware "Ask our assistant", and the honesty guard.</td><td class="pass">✓ Pass</td></tr>
+    </table>
+  </nav>
+
+  <!-- ===================================================== -->
+  <section class="check" id="check-1">
+    <h2>Check 1: Chat checks the inventory level of an item</h2>
+    <p class="what">On the Fencing Left Chest Hoodie page, a guest asked the chat about stock in XL, then in L. The agent looked these up with its <code>check_stock</code> tool, which reads the database.</p>
+
+    <div class="evidence">
+      <h3>Database values (ground truth)</h3>
+      <table>
+        <tr><th>Product</th><th>Price</th><th>XS</th><th>S</th><th>M</th><th>L</th><th>XL</th><th>XXL</th></tr>
+        <tr><td>Fencing Left Chest Hoodie</td><td>$68.00</td><td>0</td><td>12</td><td>15</td><td>0</td><td>2</td><td>0</td></tr>
+      </table>
+    </div>
+
+    <div class="pair">
+      <figure>
+        <h3>1a. "How many in XL, and how much is it?"</h3>
+        <img class="narrow" src="app_check_images/inventory-chat-xl.png" alt="Chat reply: only 2 left in XL, $68 each">
+        <figcaption><strong>Proves:</strong> the chat answers "only 2 left in XL, $68 each", exactly the database's XL quantity (2) and price ($68.00). Nothing is guessed.</figcaption>
+      </figure>
+      <figure>
+        <h3>1b. "Can I get it in a large instead?"</h3>
+        <img class="narrow" src="app_check_images/inventory-chat-large.png" alt="Chat reply: sold out in L, available in S, M and XL, with similar hoodies in L">
+        <figcaption><strong>Proves:</strong> a sold-out size is reported clearly ("sold out in L", database L = 0). The alternatives' counts in L (8, 20, 8, 25) also match the database.</figcaption>
+      </figure>
+    </div>
+
+    <figure>
+      <h3>1c. The same item's product page, with XL selected</h3>
+      <img src="app_check_images/inventory-product-page.png" alt="Product page showing $68.00, sold-out sizes disabled, and Size XL: only 2 left after selecting XL">
+      <figcaption><strong>Proves:</strong> the page agrees with the chat: $68.00, L shown as "Out of stock" and disabled, and selecting XL shows "Size XL: only 2 left". Both read the same database rows.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ===================================================== -->
+  <section class="check" id="check-2">
+    <h2>Check 2: Dynamic search-result cards after a category question</h2>
+    <p class="what">On the home page, a guest asked "What hoodies do you have?". The agent returned the matching product ids as structured output, and the website rendered them as product cards on the page.</p>
+
+    <figure>
+      <h3>2a. The question and the cards appearing on the page</h3>
+      <img src="app_check_images/category-chat-and-cards.png" alt="Chat reply about 27 hoodies with a Hoodies section of product cards on the page">
+      <figcaption><strong>Proves:</strong> a "From your chat · Hoodies · 27 items" section appears on the page as soon as the reply arrives. The reply's "27 hoodies" matches the 27 hoodies in the database, and the prices it names ($68, $88 for the Brooks Brothers full-zip, $45 for the UA Gameday hood) match the catalogue.</figcaption>
+    </figure>
+
+    <figure>
+      <h3>2b. The result cards (chat closed)</h3>
+      <img src="app_check_images/category-cards.png" alt="Grid of hoodie product cards with images, names, prices and short descriptions">
+      <figcaption><strong>Proves:</strong> each card shows the product photo, type, name, short description, price and colour dots, all read from the catalogue, not written by the model.</figcaption>
+    </figure>
+
+    <div class="pair">
+      <figure>
+        <h3>2c. Clicking a chat card opens the product page</h3>
+        <img src="app_check_images/category-card-opens-product.png" alt="Basic Hoodie Big Yale product page opened from the chat card">
+        <figcaption><strong>Proves:</strong> clicking the first card (Basic Hoodie Big Yale) opens <code>/products/basic-hoodie-big-yale</code>, the same page as from the shop: the whole photo, price, description and every size marked in or out of stock (the exact count appears once a size is chosen).</figcaption>
+      </figure>
+      <figure>
+        <h3>2d. A category we don't carry: "Do you sell caps or hats?"</h3>
+        <img class="narrow" src="app_check_images/category-caps-honest.png" alt="Chat reply: we don't currently carry caps or hats">
+        <figcaption><strong>Proves:</strong> the agent says we don't carry caps or hats (the database has 0) and shows no invented cards. It names the categories we do carry.</figcaption>
+      </figure>
+    </div>
+
+    <div class="note">
+      <strong>Found and fixed during this test:</strong> on the first run, the reply said "We have <em>28</em> hoodies" while showing 27 cards. The honesty guard (Problem 9) checked prices and stock but not item counts, so it was extended. A reply's item count ("27 hoodies", "5 options") must now match the cards it shows or a count a tool returned; otherwise the agent is sent back to correct it. On three re-runs, the guard caught the agent's miscounted first draft each time, and every final reply said 27. A new automated test covers this case.
+    </div>
+  </section>
+
+  <!-- ===================================================== -->
+  <section class="check" id="check-3">
+    <h2>Check 3: Usability features from Problem 9</h2>
+    <p class="what">Four improvements from <code>output/usability.md</code>, each exercised on the live site.</p>
+
+    <figure>
+      <h3>3a. Refine and sort on the Products page (frontend)</h3>
+      <img src="app_check_images/usability-filters-and-sort.png" alt="Products page filtered to hoodies, in stock in M, navy, $40 to $70, with the price range dropdown open">
+      <figcaption><strong>Proves:</strong> Hoodies + in stock in M + Navy + a custom price range of $40–$70 (typed into the open Price dropdown and applied), sorted by price high to low, shows 17 of 102 items, the same as a direct database query. Removable chips and the URL (<code>?category=hoodies&amp;size=M&amp;color=navy&amp;min=40&amp;max=70&amp;sort=price-desc</code>) record every filter.</figcaption>
+    </figure>
+
+    <figure>
+      <h3>3b. Sold-out rescue: similar styles in a sold-out size (backend tool + page)</h3>
+      <img src="app_check_images/usability-similar-in-sold-out-size.png" alt="Similar styles in stock in M, four hoodies">
+      <figcaption><strong>Proves:</strong> the Ice Hockey Left Chest Hoodie is sold out in M, L and XL (database: 0 each). Clicking <strong>M</strong> under "Need a size that's sold out here?" shows four similar hoodies that <em>are</em> in stock in M, ranked by the same <code>find_alternatives</code> logic the agent uses.</figcaption>
+    </figure>
+
+    <figure>
+      <h3>3c. Chat shortcuts: "Ask our assistant about size XS" (frontend)</h3>
+      <img src="app_check_images/usability-ask-about-size.png" alt="Product page with XS selected and the chat answering the size question">
+      <figcaption><strong>Proves:</strong> selecting XS shows "Size XS: 20 in stock" and turns the button into "Ask our assistant about size XS". One click opens the chat and asks for the shopper, and the reply ("20 available" in XS, plus XS alternatives with their own counts 15, 5, 15, 5) matches the database. Page-aware suggestion chips sit above the input.</figcaption>
+    </figure>
+
+    <div class="evidence">
+      <h3>3d. Honesty guard (backend): automated test and live counters</h3>
+      <p>The guard checks every chat reply's prices, stock counts, item counts and product ids against what the tools returned, and sends the agent back to fix mismatches. Test run (<code>python tests/test_honesty_guard.py</code> in <code>backend/</code>, scripted model, no API cost):</p>
+<pre>PASS wrong price -&gt; guard retry -&gt; 'The Boola Boola T Shirt is $32.'
+PASS correct price -&gt; no retry
+PASS never corrected -&gt; fallback reply: "Sorry, I couldn't confirm exact prices and stock for that ju" ...
+PASS shopper's own figure ($60) allowed
+PASS '28 hoodies' with 3 cards caught; '3 hoodies' passes</pre>
+      <p>Live counters from <code>GET /api/health</code> after this session's chats:</p>
+<pre>{"status":"ok","model":"gpt-5.6-luna",
+ "honesty_guard":{"replies_checked":14,"corrections_requested":4,"unverified_fallbacks":0}}</pre>
+      <p><strong>Proves:</strong> every reply in this check passed through the guard. The 4 corrections are the miscounted hoodie drafts it caught, and no reply needed the safe fallback.</p>
+    </div>
+
+    <div class="note">
+      <strong>Also found and fixed:</strong> opening a shared link with a price the old "Under $X" dropdown didn't list (<code>max=70</code>) filtered correctly but showed "Any price" in the dropdown. That dropdown has since been replaced by a Price dropdown where shoppers enter their own minimum and maximum and press Apply, so any range a link carries is shown, as screenshot 3a shows.
+    </div>
+  </section>
+
+  <footer>
+    Screenshots were taken with headless Chrome driving the live site as a guest shopper (no account, so these chats were not saved). Images are in <code>app_check_images/</code>.
+  </footer>
+</main>
+</body>
+</html>

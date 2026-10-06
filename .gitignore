@@ -1,0 +1,28 @@
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Shop data: database and product images are not committed
+data/
+data.zip
+*.db
+*.sqlite
+products/
+products_clean/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Node
+node_modules/
+frontend/dist/
+
+# OS / editor
+.DS_Store
+.vscode/
+
+# Scripted test runs
+backend/tests/.test_audit_trail.json
