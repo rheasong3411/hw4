@@ -288,3 +288,53 @@ These messages set up the workspace and scenario; they are not themselves proble
 > - specs (loop limits, result caps, models, how to run front + back)
 
 **Follow-up:** None needed. The first prompt worked.
+
+---
+
+## Problem 13 — Push to GitHub and Submit the URL
+
+**Prompt:**
+
+> OK, so problem 13 — push to GitHub and submit the URL.
+>
+> So put the code in a folder named hw4 and push it to a public GitHub repository. Instead of the zip, I'm submitting the URL. Do not put the real .env, campus_customs.db, or product images in the GitHub repo; use .gitignore. Include .env.example with placeholders only.
+>
+> The expected file layout should be:
+>
+> ```
+> hw4/
+>   ai_prompts.md
+>   requirements.txt
+>   .env.example
+>   .gitignore
+>   readme.md
+>   frontend/          # Vite React TypeScript app
+>   backend/
+>     main.py          # FastAPI app - run with: uvicorn main:app --reload --port 8000
+>     agent.py
+>     models.py
+>     tools.py
+>     prompts/
+>       prompt.md
+>   output/
+>     harness.md
+>     design.md
+>     usability.md
+>     app_check.html
+>     app_check_images/   # screenshots linked from app_check.html
+>     audit_trail.json
+> ```
+>
+> And for the local-only data pack (not in git):
+>
+> ```
+> data/
+>   campus_customs.db
+>   products/   # images referenced by the catalogue
+> ```
+>
+> The agent itself is four files under backend/: prompts/prompt.md, agent.py, tools.py, and models.py. README.md should explain how to run the frontend and backend after placing the data pack.
+
+**Follow-up:** None needed. The first prompt worked.
+
+**Submitted URL:** https://github.com/rheasong3411/hw4
